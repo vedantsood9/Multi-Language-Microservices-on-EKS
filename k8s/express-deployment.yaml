@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: express-service
+  template:
+    metadata:
+      labels:
+        app: express-service
+    spec:
+      containers:
+      - name: express-container
+        image: kalkilinux/express-service:latest
+        ports:
+        - containerPort: 5001
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: express-service
+spec:
+  selector:
+    app: express-service
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5001
+  type: ClusterIP
+
