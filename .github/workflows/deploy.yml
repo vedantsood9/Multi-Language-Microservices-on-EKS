@@ -56,17 +56,25 @@ jobs:
         run: |
           aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
+      - name: Verify AWS Identity
+        run: aws sts get-caller-identity
+
+      - name: Display Kubeconfig
+        run: cat ~/.kube/config
+
       - name: Verify access to cluster
         run: kubectl get nodes
 
       - name: Deploy product-service with Helm
         run: |
           helm upgrade --install product-service ./helm/product-service \
-            --set image.repository=$ECR_REGISTRY/product-service \
-            --set image.tag=$IMAGE_TAG
+          --set image.repository=$ECR_REGISTRY/python-ns/repo \
+          --set image.tag=$IMAGE_TAG \
+          --kubeconfig ~/.kube/config
 
       - name: Deploy user-service with Helm
         run: |
           helm upgrade --install user-service ./helm/user-service \
-            --set image.repository=$ECR_REGISTRY/user-service \
-            --set image.tag=$IMAGE_TAG
+          --set image.repository=$ECR_REGISTRY/node-js/repo \
+          --set image.tag=$IMAGE_TAG \
+          --kubeconfig ~/.kube/config
