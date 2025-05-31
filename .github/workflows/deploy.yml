@@ -55,7 +55,8 @@ jobs:
           
       - name: Update kubeconfig
         run: |
-          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+          aws eks update-kubeconfig --region eu-north-1 --name eks-test --role-arn arn:aws:iam::087016008394:role/GIthub_Aws_OIDC_role
+
 
       - name: Verify access to cluster
         run: kubectl get nodes
