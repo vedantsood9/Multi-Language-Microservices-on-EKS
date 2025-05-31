@@ -19,8 +19,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up dynamic image tag
-        id: vars
-        run: echo "IMAGE_TAG=$(echo ${GITHUB_SHA::7})" >> $GITHUB_ENV
+        run: |
+          echo "IMAGE_TAG=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -47,9 +47,9 @@ jobs:
           curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
       - name: Install kubectl
-       run: |
+        run: |
           KUBECTL_VERSION=$(curl -s https://dl.k8s.io/release/stable.txt)
-          curl -LO https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+          curl -LO "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl"
           chmod +x kubectl
           sudo mv kubectl /usr/local/bin/kubectl
 
@@ -58,16 +58,4 @@ jobs:
           aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
 
       - name: Verify access to cluster
-        run: kubectl get nodes
-
-      - name: Deploy product-service with Helm
-        run: |
-          helm upgrade --install product-service ./helm/product-service \
-            --set image.repository=$ECR_REGISTRY/python-ns/repo \
-            --set image.tag=$IMAGE_TAG
-
-      - name: Deploy user-service with Helm
-        run: |
-          helm upgrade --install user-service ./helm/user-service \
-            --set image.repository=$ECR_REGISTRY/node-js/repo \
-            --set image.tag=$IMAGE_TAG
+        run: kubectl get no
