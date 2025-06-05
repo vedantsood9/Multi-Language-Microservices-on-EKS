@@ -8,8 +8,8 @@ on:
 env:
   AWS_REGION: ap-south-1 
   CLUSTER_NAME: rishi-test
-
   ECR_REGISTRY: 087016008394.dkr.ecr.eu-north-1.amazonaws.com
+  ECR_REGION: eu-north-1 
 
 jobs:
   deploy:
@@ -33,6 +33,8 @@ jobs:
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: ${{ env.ECR_REGION }
 
       - name: Build and push product_service image
         run: |
