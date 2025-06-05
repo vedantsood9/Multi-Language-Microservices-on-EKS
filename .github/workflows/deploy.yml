@@ -34,7 +34,7 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          region: ${{ env.ECR_REGION }
+          region: ${{ env.ECR_REGION }}
 
       - name: Build and push product_service image
         run: |
