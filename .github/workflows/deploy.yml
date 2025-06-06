@@ -8,10 +8,7 @@ on:
 env:
   AWS_REGION: ap-south-1 
   CLUSTER_NAME: rishi-test
- # ECR_REGISTRY: 087016008394.dkr.ecr.ap-south-1.amazonaws.com
   ECR_REGISTRY: public.ecr.aws/g4i2c6x6
-
-  # ECR_REGION: eu-north-1 
 
 jobs:
   deploy:
@@ -20,7 +17,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
 
       - name: Set up dynamic image tag
         run: |
@@ -35,23 +31,22 @@ jobs:
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
-        
-        # with:
-        #   region: ${{ env.ECR_REGION }}
 
       - name: Build and push product_service image
         run: |
-          docker build -t $ECR_REGISTRY/python-ns/repo $IMAGE_TAG ./product_service
-          docker push $ECR_REGISTRY//python-ns//repo:$IMAGE_TAG
-          # docker build -t $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG ./product_service
-          # docker push $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG
+          # SYNTAX FIX: Added colon (:) before $IMAGE_TAG, removed extra slash
+          # WRONG: docker build -t $ECR_REGISTRY/python-ns/repo $IMAGE_TAG ./product_service
+          # WRONG: docker push $ECR_REGISTRY//python-ns//repo:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG ./product_service
+          docker push $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG
 
       - name: Build and push user_service image
         run: |
-          docker build -t $ECR_REGISTRY/node-js/repo $IMAGE_TAG ./product_service
+          # SYNTAX FIX: Added colon (:) before $IMAGE_TAG, removed extra slash, fixed build context
+          # WRONG: docker build -t $ECR_REGISTRY/node-js/repo $IMAGE_TAG ./product_service
+          # WRONG: docker push $ECR_REGISTRY/node-js/repo:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/node-js/repo:$IMAGE_TAG ./user_service
           docker push $ECR_REGISTRY/node-js/repo:$IMAGE_TAG
-          # docker build -t $ECR_REGISTRY/node-js/repo:$IMAGE_TAG ./user_service
-          # docker push $ECR_REGISTRY/node-js/repo:$IMAGE_TAG
 
       - name: Install Helm
         run: |
