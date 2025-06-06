@@ -9,7 +9,7 @@ env:
   AWS_REGION: ap-south-1 
   CLUSTER_NAME: rishi-test
  # ECR_REGISTRY: 087016008394.dkr.ecr.ap-south-1.amazonaws.com
- ECR_REGISTRY: public.ecr.aws/g4i2c6x6
+  ECR_REGISTRY: public.ecr.aws/g4i2c6x6
 
   # ECR_REGION: eu-north-1 
 
