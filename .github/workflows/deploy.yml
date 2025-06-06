@@ -8,7 +8,8 @@ on:
 env:
   AWS_REGION: ap-south-1 
   CLUSTER_NAME: rishi-test
-  ECR_REGISTRY: 087016008394.dkr.ecr.ap-south-1.amazonaws.com
+ # ECR_REGISTRY: 087016008394.dkr.ecr.ap-south-1.amazonaws.com
+ ECR_REGISTRY: public.ecr.aws/g4i2c6x6
 
   # ECR_REGION: eu-north-1 
 
@@ -40,13 +41,17 @@ jobs:
 
       - name: Build and push product_service image
         run: |
-          docker build -t $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG ./product_service
-          docker push $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG
+          docker build -t $ECR_REGISTRY/python-ns/repo $IMAGE_TAG ./product_service
+          docker push $ECR_REGISTRY//python-ns//repo:$IMAGE_TAG
+          # docker build -t $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG ./product_service
+          # docker push $ECR_REGISTRY/python-ns/repo:$IMAGE_TAG
 
       - name: Build and push user_service image
         run: |
-          docker build -t $ECR_REGISTRY/node-js/repo:$IMAGE_TAG ./user_service
+          docker build -t $ECR_REGISTRY/node-js/repo $IMAGE_TAG ./product_service
           docker push $ECR_REGISTRY/node-js/repo:$IMAGE_TAG
+          # docker build -t $ECR_REGISTRY/node-js/repo:$IMAGE_TAG ./user_service
+          # docker push $ECR_REGISTRY/node-js/repo:$IMAGE_TAG
 
       - name: Install Helm
         run: |
